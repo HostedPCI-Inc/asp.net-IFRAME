@@ -1,0 +1,28 @@
+﻿@model HostedPCI.WebUI.Models.Entities.CreditCardModel
+@{
+    ViewBag.Title = "Preview";
+    ViewBag.PageTitle = "Preview";
+}
+
+<table class="bordered">
+    <tr><td colspan="2" class="title">Credit card info</td></tr>
+    <tr><td class="label">CardType:</td><td>@Model.CardType</td></tr>
+    <tr><td class="label">CardBin:</td><td>@Model.CardBin</td></tr>
+    <tr><td class="label">CvvCode:</td><td>@Model.CvvCode</td></tr>
+    <tr><td class="label">CardNumber:</td><td>@Model.CardNumber</td></tr>
+    <tr><td class="label">ExpirationMonth:</td><td>@Model.ExpirationMonth</td></tr>
+    <tr><td class="label">ExpirationYear:</td><td>@Model.ExpirationYear</td></tr>
+</table>
+
+@using (Html.BeginForm("auth", "order", FormMethod.Post, new {id = "CCAcceptForm"}))
+{
+    @Html.HiddenFor(m => m.CardBin)
+    @Html.HiddenFor(m => m.CardNumber)
+    @Html.HiddenFor(m => m.CardType)
+    @Html.HiddenFor(m => m.CvvCode)
+    @Html.HiddenFor(m => m.ExpirationMonth)
+    @Html.HiddenFor(m => m.ExpirationYear)
+    <div style="margin-top:20px;">
+        <input type="submit" value="Submit order &rarr;"/>
+    </div>
+}

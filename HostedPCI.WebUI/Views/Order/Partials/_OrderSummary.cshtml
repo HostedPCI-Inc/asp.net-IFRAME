@@ -1,0 +1,20 @@
+﻿@model HostedPCI.WebUI.Models.OrderPreviewModel
+
+<table class="bordered" width="400">
+    <tr>
+        <td colspan="3" class="title">Order items</td>
+    </tr>
+    <tr>
+        <td class="center bold">Name</td>
+        <td class="center bold">Price, @Model.Order.Currency</td>
+        <td class="center bold">Quantity</td>
+    </tr>
+    @foreach (var orderItem in Model.Order.OrderItems)
+    {
+        <tr>
+            <td><div>@orderItem.Name</div>@orderItem.Description</td>
+            <td class="center">@orderItem.Price</td>
+            <td class="center">@orderItem.Quantity</td>
+        </tr>
+    }
+</table>

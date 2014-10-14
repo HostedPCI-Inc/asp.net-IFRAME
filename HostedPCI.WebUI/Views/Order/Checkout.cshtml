@@ -1,0 +1,76 @@
+﻿@model HostedPCI.WebUI.Models.OrderPreviewModel
+@{
+    ViewBag.Title = "Checkout";
+    ViewBag.PageTitle = "Checkout";
+    ViewBag.IsIndexPage = true;
+}
+
+<div>
+    <h2>Payment Information</h2>
+    <div id="errorMessageContainer">
+        <div id="errorMessageText" style="font-size:14px;color:#dd0000;margin:10px 0px;"></div>
+    </div>
+    @Html.Partial("~/Views/Order/Partials/_CreditCard.cshtml")
+</div>
+
+<div class="ccblock" style="border-bottom:1px dashed #cccccc;margin-bottom:20px;padding-bottom:20px;">
+    @using (Html.BeginForm("preview", "order", FormMethod.Post, new { id = "CCAcceptForm" }))
+    {
+        @Html.Hidden("CardType", null, new { id = "ccType" })
+        @Html.Hidden("CardNumber", null, new { id = "ccNum" })
+        @Html.Hidden("CvvCode", null, new { id = "ccCVV" })
+        @Html.Hidden("ExpirationMonth", null, new { id = "expMonth" })
+        @Html.Hidden("ExpirationYear", null, new { id = "expYear" })
+        @Html.Hidden("CardBin", null, new { id = "ccBIN" })
+        <div class="row" style="margin-top:30px;">
+            <input type="button" value="Next &rarr;" id="nextButton" onclick="checkout() "/>
+            <span id="waitingMessage" style="display:none">Please wait...</span>
+        </div>
+    }
+</div>
+
+<h2>Order Summary</h2>
+
+<div><b>Order:</b> #@Model.Order.InvoiceNumber</div>
+<div><b>TotalAmount:</b> @Model.Order.TotalAmount @Model.Order.Currency</div>
+<div><b>Email:</b> @Model.Customer.Email</div>
+<br/>
+<table>
+    <tr>
+        <td>
+            @Html.Partial("~/Views/Order/Partials/_OrderSummary.cshtml", Model)
+        </td>
+        <td>
+            @Html.Partial("~/Views/Order/Partials/_BillingAddress.cshtml", Model.Customer.BillingAddress)
+        </td>
+        <td>
+            @Html.Partial("~/Views/Order/Partials/_ShippingAddress.cshtml", Model.Customer.ShippingAddress)
+        </td>
+    </tr>
+</table>
+
+<script type="text/javascript">
+    function checkout() {
+        hideErrorMessgae();
+        sendHPCIMsg();
+        showWaitMessage();
+        return false;
+    }
+
+    function showWaitMessage() {
+        document.getElementById("nextButton").disabled = "disabled";
+        document.getElementById("waitingMessage").style.display = "";
+    }
+
+    function hideWaitMessage() {
+        document.getElementById("nextButton").disabled = "";
+        document.getElementById("waitingMessage").style.display = "none";
+    }
+
+    function submitForm() {
+        document.getElementById("ccType").value = document.getElementById("ccTypeSelector").value;
+        document.getElementById("expMonth").value = document.getElementById("expMonthSelector").value;
+        document.getElementById("expYear").value = document.getElementById("expYearSelector").value;
+        document.getElementById("CCAcceptForm").submit();
+    }
+</script>
